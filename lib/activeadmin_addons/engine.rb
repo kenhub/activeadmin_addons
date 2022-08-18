@@ -1,8 +1,10 @@
 module ActiveAdminAddons
   module Rails
     class Engine < ::Rails::Engine
-      require 'sassc'
-      require 'sassc-rails'
+      if ENV["SPROCKETS"] == "true"
+        require 'sassc'
+        require 'sassc-rails'
+      end
       require "xdan-datetimepicker-rails"
       require "require_all"
       require "active_material"

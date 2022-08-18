@@ -1,13 +1,13 @@
 {
-  "name": "activeadmin_addons",
-  "version": "1.0.0",
+  "name": "@kenhub-gmbh/activeadmin_addons",
+  "version": "1.0.1",
   "description": "Set of addons to help with the activeadmin ui",
   "main": "src/all.js",
   "files": [
     "src/*"
   ],
-  "repository": "https://github.com/platanus/activeadmin_addons.git",
-  "author": "Platanus <rubygems@platan.us>",
+  "repository": "git@github.com:kenhub-gmbh/activeadmin_addons.git",
+  "author": "Kenhub GmbH <info@kenhub.com>",
   "license": "MIT",
   "scripts": {
     "build": "rollup --config rollup.config.js",

@@ -13,6 +13,7 @@ class TagsInput < ActiveAdminAddons::InputBase
     load_data_attr(:model, value: model_name)
     load_data_attr(:method, value: method)
     load_data_attr(:width, default: "80%")
+    load_data_attr(:token_separators)
 
     if active_record_select?
       load_data_attr(:relation, value: true)
@@ -25,7 +26,9 @@ class TagsInput < ActiveAdminAddons::InputBase
   private
 
   def render_array_tags
-    render_tags_control { build_hidden_control(prefixed_method, method_to_input_name, input_value) }
+    render_tags_control {
+      build_hidden_control(prefixed_method, method_to_input_name, input_value.try(:join, ","))
+    }
   end
 
   def render_collection_tags
