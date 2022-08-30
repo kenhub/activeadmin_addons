@@ -190,7 +190,7 @@
         var selectConfig = {
           placeholder: "",
           width: "80%",
-          allowClear: true
+          allowClear: false
         };
         function isFilter(path) {
           return $(select).closest(path).length > 0;
@@ -202,13 +202,6 @@
           selectConfig.width = "resolve";
         }
         $(select).select2(selectConfig);
-        $(select).on("select2:unselecting", function() {
-          $(this).data("unselecting", true);
-        }).on("select2:open", function() {
-          if ($(this).data("unselecting")) {
-            $(this).select2("close").removeData("unselecting");
-          }
-        });
       }
     }
   };
