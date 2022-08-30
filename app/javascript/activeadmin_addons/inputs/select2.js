@@ -20,7 +20,7 @@ var initializer = function() {
       var selectConfig = {
         placeholder: '',
         width: '80%',
-        allowClear: true,
+        allowClear: false,
       };
 
       function isFilter(path) {
@@ -35,15 +35,6 @@ var initializer = function() {
       }
 
       $(select).select2(selectConfig);
-
-      // Related with https://github.com/select2/select2/issues/3320
-      $(select).on('select2:unselecting', function() {
-        $(this).data('unselecting', true);
-      }).on('select2:open', function() {
-        if ($(this).data('unselecting')) {
-          $(this).select2('close').removeData('unselecting');
-        }
-      });
     }
   }
 };
