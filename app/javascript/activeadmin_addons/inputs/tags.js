@@ -31,11 +31,11 @@ var initializer = function() {
       $(el).on('select2:unselect', onItemRemoved);
       $(el).select2(selectOptions);
 
-      if ($(el).data('sortable')) addSorting()
+      if ($(el).data('sortable')) addSorting($(el))
 
       // https://github.com/select2/select2/issues/1190#issuecomment-536164431
-      function addSorting() {
-        $(el).next().find('ul.select2-selection__rendered').sortable({
+      function addSorting($select) {
+        $select.next().find('ul.select2-selection__rendered').sortable({
           containment: 'parent',
           update: (_e, ui) => {
             const $ul = ui.item.parent()
