@@ -451,6 +451,21 @@
         $(el).on("select2:select", onItemAdded);
         $(el).on("select2:unselect", onItemRemoved);
         $(el).select2(selectOptions);
+        if ($(el).data("sortable")) addSorting();
+        function addSorting() {
+          $(el).next().find("ul.select2-selection__rendered").sortable({
+            containment: "parent",
+            update: (_e, ui) => {
+              const $ul = ui.item.parent();
+              const $select2_options = $ul.find("li.select2-selection__choice");
+              for (const select2_option of $select2_options.get()) {
+                const value = select2_option.title;
+                const option = $select.find(`option[value='${value}']`)[0];
+                $select.append(option);
+              }
+            }
+          });
+        }
         function getSelectedItems() {
           var choices = $(el).parent("li.input").find(".select2-selection__choice");
           return $.map(choices, function(item) {
