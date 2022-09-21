@@ -38,6 +38,7 @@ var initializer = function() {
         $select.next().find('ul.select2-selection__rendered').sortable({
           containment: 'parent',
           update: (_e, ui) => {
+            fillHiddenInput();
             const $ul = ui.item.parent()
             const $select2_options = $ul.find('li.select2-selection__choice')
             for (const select2_option of $select2_options.get()) {
