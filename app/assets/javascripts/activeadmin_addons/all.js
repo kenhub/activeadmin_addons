@@ -190,7 +190,7 @@
         var selectConfig = {
           placeholder: "",
           width: "80%",
-          allowClear: false
+          allowClear: true
         };
         function isFilter(path) {
           return $(select).closest(path).length > 0;
@@ -202,6 +202,7 @@
           selectConfig.width = "resolve";
         }
         $(select).select2(selectConfig);
+        $(select).on("select2:open", () => $(".select2-container--open .select2-search__field")[0].focus());
       }
     }
   };
@@ -456,6 +457,7 @@
           $select.next().find("ul.select2-selection__rendered").sortable({
             containment: "parent",
             update: (_e, ui) => {
+              fillHiddenInput();
               const $ul = ui.item.parent();
               const $select2_options = $ul.find("li.select2-selection__choice");
               for (const select2_option of $select2_options.get()) {

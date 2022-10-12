@@ -20,7 +20,7 @@ var initializer = function() {
       var selectConfig = {
         placeholder: '',
         width: '80%',
-        allowClear: false,
+        allowClear: true,
       };
 
       function isFilter(path) {
@@ -35,6 +35,11 @@ var initializer = function() {
       }
 
       $(select).select2(selectConfig);
+
+      // makes sure that the search field is focused when drop-down list opens
+      $(select).on("select2:open", () =>
+        $(".select2-container--open .select2-search__field")[0].focus()
+      )
     }
   }
 };
