@@ -469,7 +469,7 @@
           });
         }
         function getSelectedItems() {
-          var choices = $(el).parent("li.input").find(".select2-selection__choice");
+          var choices = $(el).parents("li.input").find(".select2-selection__choice");
           return $.map(choices, function(item) {
             return $(item).attr("title");
           });
