@@ -2,7 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-### Unreleased
+### 1.10.1
+
+* Backport [#477](https://github.com/platanus/activeadmin_addons/pull/477) to have ActiveAdmin v3 compatibility [#479](https://github.com/platanus/activeadmin_addons/pull/479)
+
+### 1.10.0
+
+#### Added
+
+* Added Shrine support for image row and column [#396](https://github.com/platanus/activeadmin_addons/pull/396)
+* Added Markdown row and column [#409](https://github.com/platanus/activeadmin_addons/pull/409)
+* Added translation support for Rails built-in enums in select filters and tag column/row [#442](https://github.com/platanus/activeadmin_addons/pull/442)
 
 ### 1.9.0
 
