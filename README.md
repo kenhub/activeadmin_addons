@@ -1,4 +1,9 @@
 # ActiveAdmin Addons
+
+> Kenhub's fork for ActiveAdmin v4, published as `@kenhub-gmbh/activeadmin_addons`
+> on npm. ActiveAdmin v4 renders its layout from ERB, so the host app has to set
+> `data-default-select="<%= ActiveadminAddons.default_select %>"` on `<body>` in
+> its `app/views/layouts/active_admin.html.erb`. Selects use slim-select 4.
 [![Gem Version](https://badge.fury.io/rb/activeadmin_addons.svg)](https://badge.fury.io/rb/activeadmin_addons)
 
 ActiveAdmin Addons will extend your ActiveAdmin and enable a set of addons you can optionally use to improve the ActiveAdmin UI and make it awesome.
