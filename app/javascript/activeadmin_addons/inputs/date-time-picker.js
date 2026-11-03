@@ -18,7 +18,8 @@ var initializer = function() {
         });
       });
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Turbo replaces <body>, so watch the element that survives it
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   function setupDateTimePicker(container) {

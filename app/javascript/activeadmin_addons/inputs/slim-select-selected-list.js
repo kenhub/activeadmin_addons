@@ -63,7 +63,12 @@ function settings(el) {
   };
 }
 
+let observer;
+
 function setupSelectedList(containerEl) {
+  if (containerEl.dataset.selectedListInitialized) return;
+  containerEl.dataset.selectedListInitialized = 'true';
+
   containerEl.addEventListener('click', (event) => {
     const item = event.target;
     if (item.classList.contains('selected-item')) {
@@ -90,9 +95,13 @@ function mutationObserver() {
   });
 }
 
+// called for every selected list input, but one observer covers them all
 function init() {
   setupSelectedLists(document);
-  mutationObserver().observe(document.body, { childList: true, subtree: true });
+  if (observer) return;
+
+  observer = mutationObserver();
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 }
 
 export {
