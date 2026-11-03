@@ -7,7 +7,6 @@ module ActiveAdminAddons
       initializer "initialize addons" do |_app|
         require_rel "support"
         require_rel "addons"
-        require_rel "active_admin_config"
       end
     end
   end

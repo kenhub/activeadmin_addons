@@ -38,10 +38,12 @@ function setupSelect(el) {
           data[model][field] = el.value;
           updateTag(tagContainer.dataset.url, data)
             .then(() => {
-              const statusTag = tagContainer.querySelector('.status_tag');
+              // ActiveAdmin v4 renamed status_tag to status-tag and sets data-status
+              const statusTag = tagContainer.querySelector('.status_tag, .status-tag');
               statusTag.innerText = el.selectedOptions[0].text;
               statusTag.classList.remove(tagContainer.dataset.value);
               statusTag.classList.add(el.value);
+              statusTag.dataset.status = el.value;
               tagContainer.dataset.value = el.value;
               selectContainer.dataset.value = el.value;
             })

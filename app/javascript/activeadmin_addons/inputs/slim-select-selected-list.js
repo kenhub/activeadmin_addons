@@ -49,7 +49,7 @@ function settings(el) {
           item.appendChild(hiddenInput);
           selectedItemsContainer.appendChild(item);
         });
-        el.slim.setSelected();
+        el.slim.setSelected([], false);
       },
       search: (search, currentData) => {
         args.textQuery = { m: 'or' };
@@ -63,36 +63,20 @@ function settings(el) {
   };
 }
 
-function setupSelectedList(containerEl) {
-  containerEl.addEventListener('click', (event) => {
+let listening = false;
+
+// a document listener keeps working for lists added later and for pages
+// Turbo restores from its cache; called for every selected list input
+function init() {
+  if (listening) return;
+  listening = true;
+
+  document.addEventListener('click', (event) => {
     const item = event.target;
-    if (item.classList.contains('selected-item')) {
+    if (item.classList.contains('selected-item') && item.closest('.selected-list-container')) {
       item.remove();
     }
   });
-}
-
-function setupSelectedLists(node) {
-  node.querySelectorAll('.selected-list-container').forEach(setupSelectedList);
-}
-
-function mutationObserver() {
-  return new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList') {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof Element) {
-            setupSelectedLists(node);
-          }
-        });
-      }
-    });
-  });
-}
-
-function init() {
-  setupSelectedLists(document);
-  mutationObserver();
 }
 
 export {

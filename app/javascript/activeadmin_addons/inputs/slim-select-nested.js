@@ -52,8 +52,10 @@ function settings(el) {
           .parentNode
           .querySelector(`.nested_level [data-model=${model}][data-parent=${association}]`);
 
-        if (child) {
-          child.slim.setSelected();
+        // slim-select 4 also calls afterChange when a search re-renders the
+        // selected option, which must not clear the child
+        if (child && child.dataset.parentId !== el.value) {
+          child.slim.setSelected([], false);
           child.slim.setData([]);
           if (child.slim.events.afterChange) {
             child.slim.events.afterChange();

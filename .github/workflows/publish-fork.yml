@@ -1,0 +1,57 @@
+# Publishes the kenhub fork's JS as @kenhub-gmbh/activeadmin_addons from a tag:
+#   git tag kenhub-v2.0.0-beta.4-kenhub.1 && git push origin kenhub-v2.0.0-beta.4-kenhub.1
+# The repository keeps upstream's package name; only the published
+# package.json is renamed. The gem is consumed from git, not from here.
+name: Publish fork
+
+on:
+  push:
+    tags:
+      - "kenhub-v*"
+
+permissions:
+  contents: read
+  # npm trusted publishing: the job proves its identity with an OIDC token
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      # trusted publishing needs npm 11.5 or newer
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      # copies app/javascript/activeadmin_addons to src/, the published files
+      - name: Build
+        run: ./bin/js-prepublish
+
+      - name: Name and version the package after the tag
+        run: |
+          version="${GITHUB_REF_NAME#kenhub-v}"
+          node - "$version" <<'JS'
+          const fs = require("fs")
+          const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"))
+          pkg.name = "@kenhub-gmbh/activeadmin_addons"
+          pkg.version = process.argv[2]
+          pkg.repository = { type: "git", url: "git+https://github.com/kenhub/activeadmin_addons.git" }
+          // src/ is already built; prepublishOnly would rebuild it
+          delete pkg.scripts.prepublishOnly
+          fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n")
+          console.log(`${pkg.name}@${pkg.version}`)
+          JS
+
+      # a prerelease version must name its dist-tag; consumers pin the exact version
+      - name: Publish
+        run: npm publish --access public --tag kenhub
