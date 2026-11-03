@@ -49,7 +49,7 @@ function settings(el) {
           item.appendChild(hiddenInput);
           selectedItemsContainer.appendChild(item);
         });
-        el.slim.setSelected();
+        el.slim.setSelected([], false);
       },
       search: (search, currentData) => {
         args.textQuery = { m: 'or' };
@@ -92,7 +92,7 @@ function mutationObserver() {
 
 function init() {
   setupSelectedLists(document);
-  mutationObserver();
+  mutationObserver().observe(document.body, { childList: true, subtree: true });
 }
 
 export {

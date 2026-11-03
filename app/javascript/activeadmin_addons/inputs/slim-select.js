@@ -32,10 +32,12 @@ function setupSelect(el) {
   el.style.width = el.dataset.width;
   el.style.fontSize = selectStyles.fontSize;
 
-  const searchSelectFilter = el.closest('.filter_form_field');
+  // ActiveAdmin v4 renamed the filter wrapper classes
+  const searchSelectFilter = el.closest('.filter_form_field, .filters-form-field');
   if (searchSelectFilter) {
     if (searchSelectFilter.classList.contains('search_select_filter') ||
-    searchSelectFilter.classList.contains('filter_string')) {
+    searchSelectFilter.classList.contains('filter_string') ||
+    searchSelectFilter.classList.contains('string')) {
       settings.settings.allowDeselect = false;
     }
 
