@@ -63,45 +63,20 @@ function settings(el) {
   };
 }
 
-let observer;
+let listening = false;
 
-function setupSelectedList(containerEl) {
-  if (containerEl.dataset.selectedListInitialized) return;
-  containerEl.dataset.selectedListInitialized = 'true';
+// a document listener keeps working for lists added later and for pages
+// Turbo restores from its cache; called for every selected list input
+function init() {
+  if (listening) return;
+  listening = true;
 
-  containerEl.addEventListener('click', (event) => {
+  document.addEventListener('click', (event) => {
     const item = event.target;
-    if (item.classList.contains('selected-item')) {
+    if (item.classList.contains('selected-item') && item.closest('.selected-list-container')) {
       item.remove();
     }
   });
-}
-
-function setupSelectedLists(node) {
-  node.querySelectorAll('.selected-list-container').forEach(setupSelectedList);
-}
-
-function mutationObserver() {
-  return new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'childList') {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof Element) {
-            setupSelectedLists(node);
-          }
-        });
-      }
-    });
-  });
-}
-
-// called for every selected list input, but one observer covers them all
-function init() {
-  setupSelectedLists(document);
-  if (observer) return;
-
-  observer = mutationObserver();
-  observer.observe(document.documentElement, { childList: true, subtree: true });
 }
 
 export {
