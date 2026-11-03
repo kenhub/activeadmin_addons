@@ -1077,10 +1077,10 @@ side-channel@^1.0.4:
     get-intrinsic "^1.0.2"
     object-inspect "^1.9.0"
 
-slim-select@^2.4.5:
-  version "2.4.5"
-  resolved "https://registry.yarnpkg.com/slim-select/-/slim-select-2.4.5.tgz#7453d9469c4ce6d6121608a8e384561e62057382"
-  integrity sha512-64plTJiYwJJqvOQrf3Ty8BvgC3GbNPlGelT7AdhLZ8Ax0z7hxyhHHc5Mfhp1BUVkDSt0+gTpRZH2McIrjia68Q==
+slim-select@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/slim-select/-/slim-select-4.6.2.tgz#72acf4e5ce2e996fc9547d3cdbaf886eedf940f1"
+  integrity sha512-DAfmW1sufpcIh/gNb1lUJZHs8OaxyVpRAlltrB6TDOgDnmhzeXHK6w35dC44EthGf888JRzb1orbS76+H2VvAA==
 
 string.prototype.trimend@^1.0.5:
   version "1.0.6"
