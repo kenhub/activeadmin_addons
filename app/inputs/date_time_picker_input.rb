@@ -39,12 +39,13 @@ class DateTimePickerInput < ActiveAdminAddons::InputBase
 
   private
 
-  # seconds only when the step allows them; at the default step of 60
-  # a value with seconds would fail the browser's validation
+  # seconds unless the step is in whole minutes (60 when unset); at such a
+  # step a value with seconds would fail the browser's validation
   def value_format
     step = @options.dig(:input_html, :step)
-    return "%Y-%m-%dT%H:%M:%S" if step.to_s.match?(/\A\d+\z/) && (step.to_i % 60).nonzero?
+    seconds = step.nil? ? 60 : Float(step.to_s, exception: false)
+    return "%Y-%m-%dT%H:%M" if seconds && (seconds % 60).zero?
 
-    "%Y-%m-%dT%H:%M"
+    "%Y-%m-%dT%H:%M:%S"
   end
 end

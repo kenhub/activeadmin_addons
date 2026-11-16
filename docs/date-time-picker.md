@@ -2,7 +2,7 @@
 
 ## Form
 
-Renders the browser's native `datetime-local` input, with the value as `YYYY-MM-DDTHH:MM`.
+Renders the browser's native `datetime-local` input, with the value as `YYYY-MM-DDTHH:MM`, or with seconds when `input_html: { step: }` is not in whole minutes.
 
 ```ruby
 form do |f|

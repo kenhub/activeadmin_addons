@@ -16,7 +16,9 @@ form do |f|
 ```
 
 A native color input always holds a color, so a blank attribute is saved as
-`#000000` once the form is submitted.
+`#000000` once the form is submitted. The palette must be a list of hex colors:
+the old picker's mapped palettes (`{ "primary" => "#FF9900" }`, storing the key)
+are not supported, so migrate such attributes to hex values first.
 
 ## Options
 

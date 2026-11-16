@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 #### Changed
 
-* Remove the jQuery dependency: `date_time_picker` renders a native `datetime-local` input and `color_picker` a native color input with the palette as suggestions
+* Remove the jQuery dependency: `date_time_picker` renders a native `datetime-local` input and `color_picker` a native color input with the palette as suggestions (hex colors only, mapped palettes are no longer supported)
 * `toggle_bool_column` updates with `fetch` instead of `$.ajax`
 * Drop `jquery-datetimepicker`, `xdan-datetimepicker-rails` and the jQuery palette color picker; `picker_options` and the `datetime_picker_*` settings are ignored
 
