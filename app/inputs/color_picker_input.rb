@@ -40,7 +40,8 @@ class ColorPickerInput < ActiveAdminAddons::InputBase
   end
 
   def palette_list
-    options = @options.fetch(:palette, DEFAULT_PALETTE).map do |color|
+    palette = calculate_attr_value(:palette, default: DEFAULT_PALETTE)
+    options = palette.map do |color|
       template.content_tag(:option, nil, value: color)
     end
     template.content_tag(:datalist, template.safe_join(options), id: palette_id)

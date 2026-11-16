@@ -22,6 +22,16 @@ function requestBody(toggle, value) {
   return body;
 }
 
+// a redirect (e.g. to a login page) or a non-JSON body means nothing was saved
+const NO_CONTENT = 204;
+
+async function saved(response) {
+  if (!response || !response.ok) return false;
+  if (response.status === NO_CONTENT) return true;
+
+  return response.json().then(() => true, () => false);
+}
+
 async function updateToggle(toggle) {
   const value = toggle.dataset.value === 'true';
   // eslint-disable-next-line no-alert
@@ -31,8 +41,9 @@ async function updateToggle(toggle) {
     method: 'PATCH',
     headers: { 'Accept': 'application/json', 'X-CSRF-Token': csrfToken() },
     body: requestBody(toggle, value),
+    redirect: 'error',
   }).catch(() => null);
-  if (!response || !response.ok) {
+  if (!(await saved(response))) {
     // eslint-disable-next-line no-alert
     alert('Error: Update Unsuccessful');
 
