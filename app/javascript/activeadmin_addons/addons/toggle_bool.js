@@ -39,7 +39,12 @@ async function updateToggle(toggle) {
 
   const response = await fetch(toggle.dataset.url, {
     method: 'PATCH',
-    headers: { 'Accept': 'application/json', 'X-CSRF-Token': csrfToken() },
+    // X-Requested-With as jQuery sent it, for request.xhr? checks
+    headers: {
+      'Accept': 'application/json',
+      'X-CSRF-Token': csrfToken(),
+      'X-Requested-With': 'XMLHttpRequest',
+    },
     body: requestBody(toggle, value),
     redirect: 'error',
   }).catch(() => null);
