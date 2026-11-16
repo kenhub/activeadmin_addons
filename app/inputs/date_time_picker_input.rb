@@ -32,20 +32,21 @@ class DateTimePickerInput < ActiveAdminAddons::InputBase
 
   def formatted_input_value
     v = input_value
-    return v.strftime(value_format) if v.respond_to?(:strftime)
+    return v.strftime(value_format(v)) if v.respond_to?(:strftime)
 
     v.to_s
   end
 
   private
 
-  # seconds unless the step is in whole minutes (60 when unset); at such a
-  # step a value with seconds would fail the browser's validation
-  def value_format
-    step = @options.dig(:input_html, :step)
-    seconds = step.nil? ? 60 : Float(step.to_s, exception: false)
-    return "%Y-%m-%dT%H:%M" if seconds && (seconds % 60).zero?
+  # Seconds and milliseconds only when set: without a min the browser bases
+  # the step on the rendered value, so the value always passes validation.
+  def value_format(value)
+    format = "%Y-%m-%dT%H:%M"
+    return format unless value.respond_to?(:sec)
+    return "#{format}:%S.%L" unless value.strftime("%L") == "000"
+    return "#{format}:%S" unless value.sec.zero?
 
-    "%Y-%m-%dT%H:%M:%S"
+    format
   end
 end

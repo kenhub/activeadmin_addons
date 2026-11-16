@@ -22,30 +22,28 @@ describe "Date Time Picker Input", type: :feature do
       expect(picker_input[:class]).to include("date-time-picker-input")
     end
 
-    it "shows the saved value in the input's format" do
+    def edit_invoice_updated_at(time)
       invoice = Invoice.first_or_create!
+      invoice.update_column(:updated_at, Time.zone.parse(time))
       visit edit_admin_invoice_path(invoice)
-
-      expect(picker_input.value).to eq(invoice.updated_at.strftime("%Y-%m-%dT%H:%M"))
     end
-  end
 
-  context "with a step in seconds" do
-    before do
-      register_page(Invoice) do
-        form do |f|
-          f.input :updated_at, as: :date_time_picker, input_html: { step: 1 }
-          f.actions
-        end
-      end
+    it "leaves out the seconds of a whole minute" do
+      edit_invoice_updated_at("2024-05-06 10:30:00")
+
+      expect(picker_input.value).to eq("2024-05-06T10:30")
     end
 
     it "keeps the saved value's seconds" do
-      invoice = Invoice.first_or_create!
-      visit edit_admin_invoice_path(invoice)
+      edit_invoice_updated_at("2024-05-06 10:30:15")
 
-      expect(find("#invoice_updated_at").value)
-        .to eq(invoice.updated_at.strftime("%Y-%m-%dT%H:%M:%S"))
+      expect(picker_input.value).to eq("2024-05-06T10:30:15")
+    end
+
+    it "keeps the saved value's milliseconds" do
+      edit_invoice_updated_at("2024-05-06 10:30:15.25")
+
+      expect(picker_input.value).to eq("2024-05-06T10:30:15.250")
     end
   end
 end
