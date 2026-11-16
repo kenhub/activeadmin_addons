@@ -22,12 +22,15 @@
 
 # Renders a native datetime-local input; picker_options and the
 # datetime_picker_* settings belonged to the removed jQuery picker.
+# The step defaults to "any": at the browser's 60-second default, a saved
+# value with seconds or a min would reject other values.
 class DateTimePickerInput < ActiveAdminAddons::InputBase
   def load_control_attributes
     load_class(@options[:class])
     load_attr(:type, value: "datetime-local")
     load_attr(:autocomplete, value: 'off')
     load_attr(:value, value: formatted_input_value)
+    load_attr(:step, value: @options.dig(:input_html, :step) || "any")
   end
 
   def formatted_input_value
@@ -39,8 +42,7 @@ class DateTimePickerInput < ActiveAdminAddons::InputBase
 
   private
 
-  # Seconds and milliseconds only when set: without a min the browser bases
-  # the step on the rendered value, so the value always passes validation.
+  # seconds and milliseconds only when the saved value has them
   def value_format(value)
     format = "%Y-%m-%dT%H:%M"
     return format unless value.respond_to?(:sec)

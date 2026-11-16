@@ -2,7 +2,7 @@
 
 ## Form
 
-Renders the browser's native `datetime-local` input, with the value as `YYYY-MM-DDTHH:MM`, plus seconds and milliseconds when the saved value has them.
+Renders the browser's native `datetime-local` input, with the value as `YYYY-MM-DDTHH:MM`, plus seconds and milliseconds when the saved value has them. The `step` defaults to `any`, so any value passes the browser's validation; pass `input_html: { step: }` to restrict it.
 
 ```ruby
 form do |f|
