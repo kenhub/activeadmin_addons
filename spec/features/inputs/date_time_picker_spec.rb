@@ -1,83 +1,32 @@
 require "rails_helper"
 
 describe "Date Time Picker Input", type: :feature do
-  context "Form", js: true do
+  context "Form" do
     def picker_input
       find("#invoice_updated_at")
     end
 
-    context "with defaults" do
-      before do
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker
-            f.actions
-          end
+    before do
+      register_page(Invoice) do
+        form do |f|
+          f.input :updated_at, as: :date_time_picker
+          f.actions
         end
-
-        visit new_admin_invoice_path
-      end
-
-      it "shows date time picker" do
-        expect(page).to have_css(".date-time-picker-input", count: 1)
       end
     end
 
-    context "passing options" do
-      before do
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker,
-                                 picker_options: {
-                                   today_button: true,
-                                   allow_times: [
-                                     '12:10', '13:10', '15:10',
-                                     '17:10', '18:10', '19:10'
-                                   ]
-                                 }
-            f.actions
-          end
-        end
+    it "shows a native date and time input" do
+      visit new_admin_invoice_path
 
-        visit new_admin_invoice_path
-      end
-
-      it "applies given options" do
-        picker_input.click
-        expect(page).to have_css(".xdsoft_time_variant .xdsoft_time", count: 6)
-        expect(page).to have_css(".xdsoft_today_button", count: 1)
-      end
+      expect(picker_input[:type]).to eq("datetime-local")
+      expect(picker_input[:class]).to include("date-time-picker-input")
     end
 
-    context "with default options" do
-      before do
-        # This if for frontend (js)
-        ActiveadminAddons.datetime_picker_default_options = {
-          today_button: false,
-          format: "d-m-Y H:i",
-          timepicker: false
-        }
+    it "shows the saved value in the input's format" do
+      invoice = Invoice.first_or_create!
+      visit edit_admin_invoice_path(invoice)
 
-        # This if for backend (Ruby)
-        ActiveadminAddons.datetime_picker_input_format = "%d-%m-%Y %H:%M"
-
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker, picker_options: { timepicker: true }
-            f.actions
-          end
-        end
-
-        @invoice = Invoice.first_or_create!
-        visit edit_admin_invoice_path(@invoice)
-      end
-
-      it "applies default options" do
-        expect(picker_input.value).to eq(@invoice.updated_at.strftime("%d-%m-%Y %H:%M"))
-        picker_input.click
-        expect(page).to have_css(".xdsoft_today_button", visible: false)
-        expect(page).to have_css(".xdsoft_timepicker")
-      end
+      expect(picker_input.value).to eq(invoice.updated_at.strftime("%Y-%m-%dT%H:%M"))
     end
   end
 end

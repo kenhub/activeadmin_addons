@@ -181,25 +181,21 @@ Using `nested_select` input, you can build related select inputs.
 
 ### Color Picker Input
 
-You can pick colors using [JQuery Palette Color Picker](https://github.com/carloscabo/jquery-palette-color-picker)
+You can pick colors with the browser's native color input, which suggests a palette
 
 ```ruby
 f.input :color, as: :color_picker
 ```
 
-<img src="./docs/images/color-picker.gif" height="280" />
-
 [Read more!](docs/color-picker.md)
 
 ### Date Time Picker Input
 
-You can pick dates with time using the xdan's [jQuery Plugin Date and Time Picker](https://github.com/xdan/datetimepicker)
+You can pick dates with time using the browser's native `datetime-local` input
 
 ```ruby
 f.input :updated_at, as: :date_time_picker
 ```
-
-<img src="./docs/images/date-time-picker.gif" height="280" />
 
 [Read more!](docs/date-time-picker.md)
 

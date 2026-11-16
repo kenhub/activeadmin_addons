@@ -2,7 +2,9 @@
 
 ## Form
 
-You can pick colors using [JQuery Palette Color Picker](https://github.com/carloscabo/jquery-palette-color-picker)
+Renders the browser's native color input (`<input type="color">`). The palette
+is offered as suggestions through a `<datalist>`; browsers without datalist
+support for color inputs show their plain picker.
 
 ```ruby
 form do |f|
@@ -13,7 +15,8 @@ form do |f|
   f.actions
 ```
 
-<img src="./images/color-picker.gif" height="280" />
+A native color input always holds a color, so a blank attribute is saved as
+`#000000` once the form is submitted.
 
 ## Options
 
@@ -27,5 +30,3 @@ form do |f|
 
   f.actions
 ```
-
-<img src="./images/color-picker-colors.gif" height="280" />
