@@ -1,83 +1,67 @@
 require "rails_helper"
 
 describe "Date Time Picker Input", type: :feature do
-  context "Form", js: true do
+  context "Form" do
     def picker_input
       find("#invoice_updated_at")
     end
 
-    context "with defaults" do
-      before do
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker
-            f.actions
-          end
+    before do
+      register_page(Invoice) do
+        form do |f|
+          f.input :updated_at, as: :date_time_picker
+          f.actions
         end
-
-        visit new_admin_invoice_path
-      end
-
-      it "shows date time picker" do
-        expect(page).to have_css(".date-time-picker-input", count: 1)
       end
     end
 
-    context "passing options" do
-      before do
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker,
-                                 picker_options: {
-                                   today_button: true,
-                                   allow_times: [
-                                     '12:10', '13:10', '15:10',
-                                     '17:10', '18:10', '19:10'
-                                   ]
-                                 }
-            f.actions
-          end
+    it "shows a native date and time input" do
+      visit new_admin_invoice_path
+
+      expect(picker_input[:type]).to eq("datetime-local")
+      expect(picker_input[:class]).to include("date-time-picker-input")
+      expect(picker_input[:step]).to eq("any")
+    end
+
+    def edit_invoice_updated_at(time)
+      invoice = Invoice.first_or_create!
+      invoice.update_column(:updated_at, Time.zone.parse(time))
+      visit edit_admin_invoice_path(invoice)
+    end
+
+    it "leaves out the seconds of a whole minute" do
+      edit_invoice_updated_at("2024-05-06 10:30:00")
+
+      expect(picker_input.value).to eq("2024-05-06T10:30")
+    end
+
+    it "keeps the saved value's seconds" do
+      edit_invoice_updated_at("2024-05-06 10:30:15")
+
+      expect(picker_input.value).to eq("2024-05-06T10:30:15")
+    end
+
+    it "keeps the saved value's milliseconds" do
+      edit_invoice_updated_at("2024-05-06 10:30:15.25")
+
+      expect(picker_input.value).to eq("2024-05-06T10:30:15.250")
+    end
+  end
+
+  context "with a step" do
+    before do
+      register_page(Invoice) do
+        form do |f|
+          f.input :updated_at, as: :date_time_picker, input_html: { step: 900 }
+          f.actions
         end
-
-        visit new_admin_invoice_path
-      end
-
-      it "applies given options" do
-        picker_input.click
-        expect(page).to have_css(".xdsoft_time_variant .xdsoft_time", count: 6)
-        expect(page).to have_css(".xdsoft_today_button", count: 1)
       end
     end
 
-    context "with default options" do
-      before do
-        # This if for frontend (js)
-        ActiveadminAddons.datetime_picker_default_options = {
-          today_button: false,
-          format: "d-m-Y H:i",
-          timepicker: false
-        }
+    it "keeps the given step" do
+      visit new_admin_invoice_path
 
-        # This if for backend (Ruby)
-        ActiveadminAddons.datetime_picker_input_format = "%d-%m-%Y %H:%M"
-
-        register_page(Invoice) do
-          form do |f|
-            f.input :updated_at, as: :date_time_picker, picker_options: { timepicker: true }
-            f.actions
-          end
-        end
-
-        @invoice = Invoice.first_or_create!
-        visit edit_admin_invoice_path(@invoice)
-      end
-
-      it "applies default options" do
-        expect(picker_input.value).to eq(@invoice.updated_at.strftime("%d-%m-%Y %H:%M"))
-        picker_input.click
-        expect(page).to have_css(".xdsoft_today_button", visible: false)
-        expect(page).to have_css(".xdsoft_timepicker")
-      end
+      expect(find("#invoice_updated_at")[:step]).to eq("900")
     end
   end
 end

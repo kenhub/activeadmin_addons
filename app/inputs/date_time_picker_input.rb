@@ -20,44 +20,35 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Renders a native datetime-local input; picker_options and the
+# datetime_picker_* settings belonged to the removed jQuery picker.
+# The step defaults to "any": at the browser's 60-second default, a saved
+# value with seconds or a min would reject other values.
 class DateTimePickerInput < ActiveAdminAddons::InputBase
   def load_control_attributes
     load_class(@options[:class])
-    load_data_attr(:picker_options, value: datetime_picker_options)
-    load_attr(:maxlength, value: 19)
+    load_attr(:type, value: "datetime-local")
     load_attr(:autocomplete, value: 'off')
     load_attr(:value, value: formatted_input_value)
+    load_attr(:step, value: @options.dig(:input_html, :step) || "any")
   end
 
   def formatted_input_value
     v = input_value
-
-    if v.is_a?(Time)
-      return DateTime.new(v.year, v.month, v.day, v.hour, v.min, v.sec).strftime(
-        ActiveadminAddons.datetime_picker_input_format
-      )
-    end
+    return v.strftime(value_format(v)) if v.respond_to?(:strftime)
 
     v.to_s
   end
 
-  def datetime_picker_options
-    @datetime_picker_options ||= begin
-      opts = default_picker_options.merge(options.fetch(:picker_options, {}))
-      Hash[opts.map { |k, v| [k.to_s.camelcase(:lower), v] }]
-    end
-  end
+  private
 
-  protected
+  # seconds and milliseconds only when the saved value has them
+  def value_format(value)
+    format = "%Y-%m-%dT%H:%M"
+    return format unless value.respond_to?(:sec)
+    return "#{format}:%S.%L" unless value.strftime("%L") == "000"
+    return "#{format}:%S" unless value.sec.zero?
 
-  def default_picker_options
-    res = ActiveadminAddons.datetime_picker_default_options.map do |k, v|
-      if v.respond_to?(:call) || v.is_a?(Proc)
-        [k, v.call]
-      else
-        [k, v]
-      end
-    end
-    Hash[res]
+    format
   end
 end

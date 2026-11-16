@@ -1,5 +1,5 @@
-input[type=text] {
+input[type=datetime-local] {
   &.date-time-picker-input {
-    width: 110px;
+    width: auto;
   }
 }
